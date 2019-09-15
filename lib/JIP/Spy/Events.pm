@@ -95,7 +95,7 @@ sub AUTOLOAD {
             times      => $times,
         );
 
-        return $on_spy_event->($event);
+        return $on_spy_event->($self, $event);
     }
 
     return $self;
@@ -133,8 +133,5 @@ sub VERSION {
 }
 
 sub DESTROY {}
-
-use JIP::Debug qw(to_debug to_debug_raw to_debug_empty to_debug_count to_debug_trace to_debug_truncate);
-BEGIN { $JIP::Debug::HANDLE = IO::File->new('/home/jip/debug.log', '>>'); }
 
 1;

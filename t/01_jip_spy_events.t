@@ -134,7 +134,7 @@ subtest 'clear()' => sub {
 };
 
 subtest 'on_spy_event' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     my $o = JIP::Spy::Events->new;
 
@@ -165,7 +165,9 @@ subtest 'on_spy_event' => sub {
 
     $o->on_spy_event(
         tratata => sub {
-            my ($event) = @ARG;
+            my ($spy, $event) = @ARG;
+
+            is $spy, $o;
 
             is $event->method,     'tratata';
             is $event->want_array, q{};
