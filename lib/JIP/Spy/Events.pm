@@ -16,14 +16,18 @@ our $AUTOLOAD;
 sub new {
     my ($class, %param) = @ARG;
 
-    return bless(
-        {
-            on_spy_event => {},
-            events       => [],
-            times        => {},
-        },
-        $class,
-    );
+    my $state = {
+        on_spy_event => {},
+        events       => [],
+        times        => {},
+        want_array   => 0,
+    };
+
+    if ($param{'want_array'}) {
+        $state->{'want_array'} = 1;
+    }
+
+    return bless $state, $class;
 }
 
 sub events {
@@ -36,6 +40,12 @@ sub times {
     my ($self) = @ARG;
 
     return $self->{'times'};
+}
+
+sub want_array {
+    my ($self) = @ARG;
+
+    return $self->{'want_array'};
 }
 
 sub clear {
@@ -111,11 +121,18 @@ sub DESTROY {}
 sub _handle_event {
     my ($self, %param) = @ARG;
 
-    push @{ $self->events }, {
-        method     => $param{'method_name'},
-        arguments  => $param{'arguments'},
-        want_array => $param{'want_array'},
-    };
+    {
+        my $event = {
+            method    => $param{'method_name'},
+            arguments => $param{'arguments'},
+        };
+
+        if ($self->want_array) {
+            $event->{want_array} = $param{'want_array'};
+        }
+
+        push @{ $self->events }, $event;
+    }
 
     my $times = $self->times->{$param{'method_name'}} // 0;
     $times += 1;
