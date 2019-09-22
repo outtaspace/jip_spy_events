@@ -7,19 +7,22 @@ use warnings FATAL => 'all';
 use Test::More;
 use English qw(-no_match_vars);
 
-plan tests => 6;
+plan tests => 8;
+
+use_ok 'JIP::Spy::Events', 'v0.0.1';
 
 subtest 'Require some module' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
-    use_ok 'JIP::Spy::Events', 'v0.0.1';
     require_ok 'JIP::Spy::Events';
 
     diag(
-        sprintf 'Testing JIP::Spy::Events %s, Perl %s, %s',
+        sprintf(
+            'Testing JIP::Spy::Events %s, Perl %s, %s',
             $JIP::Spy::Events::VERSION,
             $PERL_VERSION,
             $EXECUTABLE_NAME,
+        ),
     );
 };
 
@@ -31,11 +34,35 @@ subtest 'new()' => sub {
 
     isa_ok $o, 'JIP::Spy::Events';
 
-    can_ok $o, qw(new events times clear on_spy_event);
+    can_ok $o, qw(new events times clear on_spy_event _handle_event);
 
     is_deeply $o->events,       [];
     is_deeply $o->times,        {};
     is_deeply $o->on_spy_event, {};
+};
+
+subtest '_handle_event' => sub {
+    plan tests => 2;
+
+    my $o = JIP::Spy::Events->new;
+
+    my $result = $o->_handle_event(
+        method_name => 'tratata',
+        arguments   => ['42'],
+        want_array  => 1,
+    );
+
+    is_deeply $o->events, [
+        {
+            method     => 'tratata',
+            arguments  => ['42'],
+            want_array => 1,
+        },
+    ];
+
+    is_deeply $o->times, {
+        tratata => 1,
+    };
 };
 
 subtest 'AUTOLOAD() as class method' => sub {
@@ -176,7 +203,7 @@ subtest 'on_spy_event' => sub {
             is_deeply $event->arguments, ['42'];
 
             return '100500';
-        }
+        },
     );
 
     my $result = $o->tratata('42');

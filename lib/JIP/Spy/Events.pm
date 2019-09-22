@@ -68,37 +68,11 @@ sub AUTOLOAD {
 
     undef $AUTOLOAD;
 
-    my $want_array = wantarray;
-
-    push @{ $self->events }, {
-        method     => $method_name,
-        arguments  => \@arguments,
-        want_array => $want_array,
-    };
-
-    my $times = $self->{'times'}->{$method_name} // 0;
-    $times += 1;
-    $self->{'times'}->{$method_name} = $times;
-
-    if (my $on_spy_event = $self->on_spy_event->{$method_name}) {
-        if (ref $on_spy_event ne 'CODE') {
-            croak sprintf(
-                q{"%s" is not a callback},
-                $method_name,
-            );
-        }
-
-        my $event = JIP::Spy::Event->new(
-            method     => $method_name,
-            arguments  => \@arguments,
-            want_array => $want_array,
-            times      => $times,
-        );
-
-        return $on_spy_event->($self, $event);
-    }
-
-    return $self;
+    return $self->_handle_event(
+        method_name => $method_name,
+        arguments   => \@arguments,
+        want_array  => wantarray,
+    );
 }
 
 sub isa {
@@ -133,5 +107,39 @@ sub VERSION {
 }
 
 sub DESTROY {}
+
+sub _handle_event {
+    my ($self, %param) = @ARG;
+
+    push @{ $self->events }, {
+        method     => $param{'method_name'},
+        arguments  => $param{'arguments'},
+        want_array => $param{'want_array'},
+    };
+
+    my $times = $self->times->{$param{'method_name'}} // 0;
+    $times += 1;
+    $self->times->{$param{'method_name'}} = $times;
+
+    if (my $on_spy_event = $self->on_spy_event->{$param{'method_name'}}) {
+        if (ref $on_spy_event ne 'CODE') {
+            croak sprintf(
+                q{"%s" is not a callback},
+                $param{'method_name'},
+            );
+        }
+
+        my $event = JIP::Spy::Event->new(
+            method     => $param{'method_name'},
+            arguments  => $param{'arguments'},
+            want_array => $param{'want_array'},
+            times      => $times,
+        );
+
+        return $on_spy_event->($self, $event);
+    }
+
+    return $self;
+}
 
 1;

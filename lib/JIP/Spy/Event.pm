@@ -11,7 +11,7 @@ our $VERSION = version->declare('v0.0.1');
 sub new {
     my ($class, %param) = @ARG;
 
-    return bless (
+    return bless(
         {
             method     => $param{'method'},
             arguments  => $param{'arguments'},

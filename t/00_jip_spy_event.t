@@ -7,19 +7,22 @@ use warnings FATAL => 'all';
 use Test::More;
 use English qw(-no_match_vars);
 
-plan tests => 3;
+plan tests => 4;
+
+use_ok 'JIP::Spy::Event', 'v0.0.1';
 
 subtest 'Require some module' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
-    use_ok 'JIP::Spy::Event', 'v0.0.1';
     require_ok 'JIP::Spy::Event';
 
     diag(
-        sprintf 'Testing JIP::Spy::Event %s, Perl %s, %s',
+        sprintf(
+            'Testing JIP::Spy::Event %s, Perl %s, %s',
             $JIP::Spy::Event::VERSION,
             $PERL_VERSION,
             $EXECUTABLE_NAME,
+        ),
     );
 };
 
