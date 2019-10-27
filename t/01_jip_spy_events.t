@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 use Test::More;
 use English qw(-no_match_vars);
 
-plan tests => 9;
+plan tests => 10;
 
 use_ok 'JIP::Spy::Events', 'v0.0.1';
 
@@ -39,6 +39,7 @@ subtest 'new()' => sub {
         events
         times
         want_array
+        skip_methods
         clear
         on_spy_event
         _handle_event
@@ -227,6 +228,30 @@ subtest 'AUTOLOAD() with want_array' => sub {
 
         is_deeply \@results, [$o];
     }
+};
+
+subtest 'AUTOLOAD() with skip_methods' => sub {
+    plan tests => 5;
+
+    my $o = JIP::Spy::Events->new(
+        skip_methods => [qw(tratata)],
+    );
+
+    is_deeply $o->skip_methods, { tratata => undef };
+
+    is $o->tratata, $o;
+    is $o->ololo,   $o;
+
+    is_deeply $o->events, [
+        {
+            method     => 'ololo',
+            arguments  => [],
+        },
+    ];
+
+    is_deeply $o->times, {
+        ololo => 1,
+    };
 };
 
 subtest 'clear()' => sub {

@@ -20,11 +20,18 @@ sub new {
         on_spy_event => {},
         events       => [],
         times        => {},
+        skip_methods => {},
         want_array   => 0,
     };
 
     if ($param{'want_array'}) {
         $state->{'want_array'} = 1;
+    }
+
+    if ($param{'skip_methods'}) {
+        foreach my $method_name (@{ $param{'skip_methods'} }) {
+            $state->{'skip_methods'}->{$method_name} = undef;
+        }
     }
 
     return bless $state, $class;
@@ -46,6 +53,12 @@ sub want_array {
     my ($self) = @ARG;
 
     return $self->{'want_array'};
+}
+
+sub skip_methods {
+    my ($self) = @ARG;
+
+    return $self->{'skip_methods'};
 }
 
 sub clear {
@@ -120,6 +133,8 @@ sub DESTROY {}
 
 sub _handle_event {
     my ($self, %param) = @ARG;
+
+    return $self if exists $self->skip_methods->{$param{'method_name'}};
 
     {
         my $event = {
