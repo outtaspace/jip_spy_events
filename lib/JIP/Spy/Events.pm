@@ -218,10 +218,6 @@ Testing with L<Test::More>:
 
 Testing with L<Test::More>, and want_array is turning on:
 
-    use Test::More;
-
-    use_ok 'JIP::Spy::Events';
-
     my $spy_events = JIP::Spy::Events->new(want_array => 1);
 
     $spy_events->foo;
@@ -234,13 +230,21 @@ Testing with L<Test::More>, and want_array is turning on:
         { method => 'foo', arguments => [], want_array => 1 },
     ];
 
-    done_testing;
+Testing with L<Test::More>, and skip_methods:
+
+    my $spy_events = JIP::Spy::Events->new(skip_methods => ['bar']);
+
+    is_deeply $spy_events->skip_methods, { bar => undef };
+
+    $spy_events->foo->bar;
+
+    is_deeply $spy_events->events, [
+        { method => 'foo', arguments => [] },
+    ];
+
+    is_deeply $spy_events->times, { foo => 1 };
 
 FizzBuzz example:
-
-    use Test::More;
-
-    use_ok 'JIP::Spy::Events';
 
     my $spy_events = JIP::Spy::Events->new;
 
@@ -251,8 +255,8 @@ FizzBuzz example:
             my $attempt = $event->arguments->[0];
 
             return (
-                !($attempt % 3)  ? 'Fizz' :
-                !($attempt % 5)  ? 'Buzz' :
+                !($attempt % 3) ? 'Fizz' :
+                !($attempt % 5) ? 'Buzz' :
                 $attempt
             );
         },
@@ -267,8 +271,6 @@ FizzBuzz example:
         4,
         'Buzz',
     ];
-
-    done_testing;
 
 =head1 ATTRIBUTES
 
