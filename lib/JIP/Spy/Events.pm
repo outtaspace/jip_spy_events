@@ -5,7 +5,7 @@ use warnings;
 use version 0.77;
 
 use Carp qw(croak);
-use Scalar::Util qw(blessed reftype);
+use Scalar::Util qw(blessed);
 use English qw(-no_match_vars);
 
 use JIP::Spy::Event;
