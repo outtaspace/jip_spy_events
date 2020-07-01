@@ -7,9 +7,11 @@ use warnings FATAL => 'all';
 use Test::More;
 use English qw(-no_match_vars);
 
-plan tests => 4;
+BEGIN {
+    plan tests => 4;
 
-use_ok 'JIP::Spy::Event', 'v0.0.1';
+    use_ok 'JIP::Spy::Event', 'v0.0.1';
+}
 
 subtest 'Require some module' => sub {
     plan tests => 1;

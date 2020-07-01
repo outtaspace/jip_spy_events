@@ -7,9 +7,11 @@ use warnings FATAL => 'all';
 use Test::More;
 use English qw(-no_match_vars);
 
-plan tests => 10;
+BEGIN {
+    plan tests => 10;
 
-use_ok 'JIP::Spy::Events', 'v0.0.1';
+    use_ok 'JIP::Spy::Events', 'v0.0.1';
+}
 
 subtest 'Require some module' => sub {
     plan tests => 1;
@@ -78,14 +80,17 @@ subtest '_handle_event' => sub {
 };
 
 subtest 'AUTOLOAD() as class method' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
-    eval { JIP::Spy::Events->AUTOLOAD } or do {
+    my $done = eval { return JIP::Spy::Events->AUTOLOAD; };
+    if ($EVAL_ERROR) {
         like $EVAL_ERROR, qr{
             ^
             Can't \s call \s "AUTOLOAD" \s as \s a \s class \s method
         }x;
-    };
+    }
+
+    ok !$done;
 };
 
 subtest 'AUTOLOAD()' => sub {
