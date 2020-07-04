@@ -29,11 +29,12 @@ subtest 'Require some module' => sub {
 };
 
 subtest 'new()' => sub {
-    plan tests => 7;
+    plan tests => 4;
 
     my $o = JIP::Spy::Mock::Object->new;
     ok $o, 'got instance of JIP::Spy::Mock::Object';
 
+    isa_ok $o, 'JIP::Spy::Mock';
     isa_ok $o, 'JIP::Spy::Mock::Object';
 
     can_ok $o, qw(new);

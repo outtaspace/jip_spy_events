@@ -29,7 +29,7 @@ subtest 'Require some module' => sub {
 };
 
 subtest 'new()' => sub {
-    plan tests => 7;
+    plan tests => 3;
 
     my $o = JIP::Spy::Mock->new;
     ok $o, 'got instance of JIP::Spy::Mock';
