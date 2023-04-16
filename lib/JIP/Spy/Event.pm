@@ -6,7 +6,7 @@ use version 0.77;
 
 use English qw(-no_match_vars);
 
-our $VERSION = version->declare('v0.0.2');
+our $VERSION = version->declare('v0.0.3');
 
 sub new {
     my ( $class, %param ) = @ARG;
@@ -56,7 +56,7 @@ JIP::Spy::Event - Object representation of an individual call to a spied method
 
 =head1 VERSION
 
-This document describes L<JIP::Spy::Event> version C<v0.0.2>.
+This document describes L<JIP::Spy::Event> version C<v0.0.3>.
 
 =head1 SYNOPSIS
 
@@ -120,7 +120,7 @@ Volodymyr Zhavoronkov, C<< <flyweight at yandex dot ru> >>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2019-2023 Volodymyr Zhavoronkov.
+Copyright (c) 2019-2023 Volodymyr Zhavoronkov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a

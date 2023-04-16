@@ -10,7 +10,7 @@ use English qw(-no_match_vars);
 
 use JIP::Spy::Event;
 
-our $VERSION = version->declare('v0.0.2');
+our $VERSION = version->declare('v0.0.3');
 our $AUTOLOAD;
 
 sub new {
@@ -184,7 +184,7 @@ JIP::Spy::Events - the most basic function spy ability
 
 =head1 VERSION
 
-This document describes L<JIP::Spy::Events> version C<v0.0.2>.
+This document describes L<JIP::Spy::Events> version C<v0.0.3>.
 
 =head1 SYNOPSIS
 
@@ -332,7 +332,7 @@ Volodymyr Zhavoronkov, C<< <flyweight at yandex dot ru> >>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2019-2023 Volodymyr Zhavoronkov.
+Copyright (c) 2019-2023 Volodymyr Zhavoronkov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a
