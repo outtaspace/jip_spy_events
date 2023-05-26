@@ -288,4 +288,24 @@ subtest 'on_spy_event' => sub {
     is $result, '100500';
 };
 
+subtest 'called()' => sub {
+    my $sut = JIP::Spy::Events->new();
+
+    is $sut->called(), 0;
+
+    $sut->tratata();
+
+    is $sut->called(), 1;
+};
+
+subtest 'not_called()' => sub {
+    my $sut = JIP::Spy::Events->new();
+
+    is $sut->not_called(), 1;
+
+    $sut->tratata();
+
+    is $sut->not_called(), 0;
+};
+
 done_testing();
